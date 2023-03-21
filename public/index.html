@@ -1,21 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Webcam App</title>
-  </head>
-  <body>
-    <h1>Webcam App</h1>
-    <video id="video" width="640" height="480" autoplay></video>
-    <script>
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function(stream) {
-          var video = document.getElementById('video');
-          video.srcObject = stream;
-          video.play();
-        })
-        .catch(function(err) {
-          console.error('Error accessing webcam', err);
+<head>
+  <title>Webcam Selector</title>
+</head>
+<body>
+  <h1>Webcam Selector</h1>
+
+  <p>Select a webcam:</p>
+  <select id="webcam-select"></select>
+  <button id="open-webcam-button">Open Webcam</button>
+
+  <div>
+    <video id="webcam-video" autoplay></video>
+  </div>
+
+  <script>
+    // Get the list of available webcams
+    navigator.mediaDevices.enumerateDevices()
+      .then(devices => {
+        const webcamSelect = document.getElementById('webcam-select');
+        devices.forEach(device => {
+          if (device.kind === 'videoinput') {
+            const option = document.createElement('option');
+            option.value = device.deviceId;
+            option.text = device.label || `Webcam ${webcamSelect.options.length + 1}`;
+            webcamSelect.add(option);
+          }
         });
-    </script>
-  </body>
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    // Add event listener to button
+    const openWebcamButton = document.getElementById('open-webcam-button');
+    openWebcamButton.addEventListener('click', () => {
+      const selectedWebcamId = webcamSelect.value;
+      const constraints = { video: { deviceId: selectedWebcamId } };
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then(stream => {
+          const videoElement = document.getElementById('webcam-video');
+          videoElement.srcObject = stream;
+          videoElement.play();
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    });
+  </script>
+</body>
 </html>
