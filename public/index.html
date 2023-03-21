@@ -16,9 +16,9 @@
 
   <script>
     // Get the list of available webcams
+    const webcamSelect = document.getElementById('webcam-select');
     navigator.mediaDevices.enumerateDevices()
       .then(devices => {
-        const webcamSelect = document.getElementById('webcam-select');
         devices.forEach(device => {
           if (device.kind === 'videoinput') {
             const option = document.createElement('option');
