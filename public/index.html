@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="main.js"></script>
-</head>
-<body>
-    <h1>Welcome</h1>
-    <p>Click the button to see result</p>
-    <button onclick="clickHandler()">Click me</button>
-</body>
+<html>
+  <head>
+    <title>Webcam App</title>
+  </head>
+  <body>
+    <h1>Webcam App</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <script>
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+          var video = document.getElementById('video');
+          video.srcObject = stream;
+          video.play();
+        })
+        .catch(function(err) {
+          console.error('Error accessing webcam', err);
+        });
+    </script>
+  </body>
 </html>
